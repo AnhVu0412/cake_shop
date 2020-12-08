@@ -11,10 +11,33 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	<context:annotation-config/>
-	<context:component-scan base-package="cakesshop.controller"/>
+	<context:component-scan base-package="cakesshop.controller,cakesshop.DAO,cakesshop.services"/>
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
-	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+		<property name="location">
+			<value>classpath:jdbc.properties</value>
+		</property>
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+	    <property name="url" value="${jdbc.url}" />
+	    <property name="username" value="${jdbc.username}" />
+	    <property name="password" value="${jdbc.password}" />		
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+    	class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactory" />
+ 	</bean>
+ 	<bean id="sessionFactory"
+	    class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource"></property>
+	    <property name="packagesToScan" value="cakesshop.model" />
+	    <property name="hibernateProperties" value="classpath:hibernate.properties" />
+	  </bean>
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:annotation-driven enable-matrix-variables="true"></mvc:annotation-driven>
 </beans>

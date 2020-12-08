@@ -9,13 +9,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form>
-<label>UserName</label>
-<input type="text" name="uname">
-<label>PassWord</label>
-<input type="password" name="pword">
-<button type="submit">Login</button>
-</form>
 
 </body>
 </html>
